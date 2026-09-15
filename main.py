@@ -7,11 +7,20 @@ import models_db
 from sqlalchemy.orm import Session
 import auth
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 app=FastAPI(title='FemWell API')
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 pcos_model=joblib.load('PCOS/pcos_svm_model.pkl')
 pcos_scaler=joblib.load('PCOS/scaler.pkl')
